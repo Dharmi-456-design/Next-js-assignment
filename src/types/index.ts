@@ -1,3 +1,17 @@
+export interface IClientRef {
+  _id: string;
+  name: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+}
+
+export interface IProjectRef {
+  _id: string;
+  title: string;
+  budget?: number;
+}
+
 export interface IClientData {
   _id: string;
   name: string;
@@ -18,8 +32,8 @@ export interface IProjectData {
   _id: string;
   title: string;
   description?: string;
-  clientId?: any;
-  client?: any;
+  clientId?: string | IClientRef | any;
+  client?: IClientRef | any;
   budget: number;
   startDate?: string | Date;
   deadline?: string | Date;
@@ -41,7 +55,7 @@ export interface ITaskData {
   _id: string;
   title: string;
   description?: string;
-  projectId?: any;
+  projectId?: string | IProjectRef | any;
   dueDate?: string | Date;
   priority: string;
   status: string;
@@ -53,7 +67,7 @@ export interface IMilestoneData {
   _id: string;
   title: string;
   description?: string;
-  projectId?: any;
+  projectId?: string | IProjectRef | any;
   dueDate?: string | Date;
   status: string;
   completedAt?: string | Date;
@@ -65,7 +79,7 @@ export interface IDeliverableData {
   _id: string;
   title: string;
   description?: string;
-  projectId?: any;
+  projectId?: string | IProjectRef | any;
   submissionDate?: string | Date;
   fileUrl?: string;
   fileName?: string;
@@ -77,8 +91,8 @@ export interface IDeliverableData {
 
 export interface IPaymentData {
   _id: string;
-  projectId?: any;
-  clientId?: any;
+  projectId?: string | IProjectRef | any;
+  clientId?: string | IClientRef | any;
   amount: number;
   paymentDate: string | Date;
   method: string;
@@ -105,4 +119,23 @@ export interface ICommentData {
   content: string;
   author?: string;
   createdAt?: string | Date;
+}
+
+export interface IDashboardMetrics {
+  revenueReceived: number;
+  outstandingPayments: number;
+  activeProjectsCount: number;
+  completedProjectsCount: number;
+  totalProjectsCount: number;
+}
+
+export interface IDashboardData {
+  metrics: IDashboardMetrics;
+  activeProjects: IProjectData[];
+  recentPayments: IPaymentData[];
+  upcomingDeadlines: ITaskData[];
+  overdueTasks: ITaskData[];
+  recentActivities: IActivityData[];
+  statusDistribution: { status: string; count: number }[];
+  revenueTrend: { month: string; amount: number }[];
 }
