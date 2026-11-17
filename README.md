@@ -84,67 +84,54 @@ ReserveX solves these problems by providing a structured, full-stack platform th
 ## 📂 Project Structure
 
 ```
-temp-reservex/
+reservex/
 ├── public/                   # Static assets
-├── scripts/                  # Utility / seed scripts
 ├── src/
 │   ├── app/                  # Next.js App Router
 │   │   ├── api/              # REST API route handlers
-│   │   │   ├── clients/
-│   │   │   ├── comments/
-│   │   │   ├── dashboard/
-│   │   │   ├── deliverables/
-│   │   │   ├── milestones/
-│   │   │   ├── payments/
-│   │   │   ├── projects/
-│   │   │   ├── reports/
-│   │   │   ├── seed/
-│   │   │   └── tasks/
-│   │   ├── clients/          # Clients page + dynamic [id] route
-│   │   ├── dashboard/        # Dashboard overview page
-│   │   ├── deliverables/     # Deliverables page
-│   │   ├── payments/         # Payments page
-│   │   ├── projects/         # Projects page + dynamic [id] route
-│   │   ├── reports/          # Reports page
-│   │   ├── tasks/            # Tasks page
-│   │   ├── layout.tsx        # Root layout
-│   │   └── page.tsx          # Home / redirect page
+│   │   │   ├── clients/      # Client CRUD & aggregation
+│   │   │   ├── comments/     # Project notes and remarks
+│   │   │   ├── dashboard/    # Aggregated KPI and overview metrics
+│   │   │   ├── deliverables/ # Deliverables tracking
+│   │   │   ├── milestones/   # Project milestone management
+│   │   │   ├── payments/     # Financial records and transactions
+│   │   │   ├── projects/     # Project management & progress
+│   │   │   ├── reports/      # Analytics, earnings & distributions
+│   │   │   ├── seed/         # Initial demo dataset seeding endpoint
+│   │   │   └── tasks/        # Task lists & status tracking
+│   │   ├── clients/          # Clients listing and dynamic [id] view
+│   │   ├── dashboard/        # Main analytical dashboard
+│   │   ├── deliverables/     # Deliverables management page
+│   │   ├── payments/         # Payment records & financial summary
+│   │   ├── projects/         # Projects overview and dynamic workspace
+│   │   ├── reports/          # Financial graphs & distribution charts
+│   │   ├── tasks/            # Global task manager
+│   │   ├── layout.tsx        # Root layout with ReserveX metadata
+│   │   └── page.tsx          # Marketing hero & workspace entry point
 │   ├── components/           # Reusable React components
-│   │   ├── clients/
-│   │   ├── dashboard/
-│   │   ├── deliverables/
-│   │   ├── layout/           # Navbar
-│   │   ├── payments/
-│   │   ├── projects/
-│   │   ├── reports/
-│   │   ├── shared/           # Button, Dialog, Input, Select, StatusBadge, etc.
-│   │   ├── tasks/
-│   │   └── status-colors.ts
-│   ├── context/              # React Context providers
-│   ├── lib/                  # Utility helpers
-│   │   ├── db.ts             # MongoDB connection helper
-│   │   ├── seed.ts           # Database seed logic
-│   │   └── utils.ts          # Shared utility functions
-│   ├── models/               # Mongoose schemas / models
-│   │   ├── Activity.ts
-│   │   ├── Client.ts
-│   │   ├── Comment.ts
-│   │   ├── Deliverable.ts
-│   │   ├── Milestone.ts
-│   │   ├── Payment.ts
-│   │   ├── Project.ts
-│   │   ├── Task.ts
-│   │   └── index.ts
+│   │   ├── layout/           # Sticky Navbar & responsive drawer
+│   │   └── shared/           # Button, Dialog, Input, Select, StatusBadge, EmptyState, PageHeader
+│   ├── lib/                  # Utilities & database connection
+│   │   ├── db.ts             # Mongoose connection manager with cached connection
+│   │   ├── seed.ts           # Demo records generator
+│   │   └── utils.ts          # INR currency formatter, date utilities, and styling helpers
+│   ├── models/               # Mongoose schemas & data models
+│   │   ├── Activity.ts       # Audit and timeline entries
+│   │   ├── Client.ts         # Client profile and contact details
+│   │   ├── Comment.ts        # Project-level comments & remarks
+│   │   ├── Deliverable.ts    # File deliverable tracking
+│   │   ├── Milestone.ts      # Project timeline milestones
+│   │   ├── Payment.ts        # Transaction records & status
+│   │   ├── Project.ts        # Client project specifications
+│   │   ├── Task.ts           # Project tasks with priorities
+│   │   └── index.ts          # Central model barrel export
 │   ├── types/
-│   │   └── index.ts          # Shared TypeScript type definitions
-│   └── globals.css           # Global styles (Tailwind base)
-├── .env.example              # Environment variable template
+│   │   └── index.ts          # Shared TypeScript type definitions & interfaces
+│   └── globals.css           # Design tokens, selection styles, and Tailwind utilities
 ├── .gitignore
 ├── eslint.config.mjs
 ├── next.config.ts
 ├── package.json
-├── postcss.config.mjs
-├── seed.js                   # Top-level seed entry point
 └── tsconfig.json
 ```
 
