@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #F7F7F4;
+    --surface: #FFFFFF;
+    --surface-secondary: #F1F2EE;
+    --text-primary: #20231F;
+    --text-secondary: #747970;
+    --text-muted: #92978F;
+    --border: #E5E7E2;
+    --accent: #426B50;
+    --accent-hover: #34573F;
+    --success: #3F7954;
+    --warning: #B78035;
+    --danger: #B94B45;
+    --info: #587B91;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+}
+
+/* Custom utility classes mapping directly to design system tokens */
+.bg-app {
+  background-color: #F7F7F4;
+}
+
+.bg-surface-primary {
+  background-color: #FFFFFF;
+}
+
+.bg-surface-subtle {
+  background-color: #F1F2EE;
+}
+
+.text-primary-dark {
+  color: #20231F;
+}
+
+.text-secondary-muted {
+  color: #747970;
+}
+
+.text-muted-faint {
+  color: #92978F;
+}
+
+.border-subtle {
+  border-color: #E5E7E2;
+}
+
+.bg-accent-green {
+  background-color: #426B50;
+}
+
+.bg-accent-hover {
+  background-color: #34573F;
+}
+
+.text-accent-green {
+  color: #426B50;
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E7E2;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #92978F;
+}
