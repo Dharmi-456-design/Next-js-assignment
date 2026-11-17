@@ -28,6 +28,16 @@
   * {
     border-color: var(--border);
   }
+
+  ::selection {
+    background-color: var(--accent);
+    color: #FFFFFF;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 /* Custom utility classes mapping directly to design system tokens */

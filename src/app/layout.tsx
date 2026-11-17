@@ -3,8 +3,9 @@ import { Navbar } from "../components/layout/Navbar";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Workloom — Freelance Business & Project Management",
-  description: "Every project. Every client. Everything in sync. Built for independent professionals and creative studios.",
+  title: "ReserveX — Freelance Business & Project Management",
+  description:
+    "Every project. Every client. Everything in sync. Built for independent professionals and creative studios.",
 };
 
 export default function RootLayout({
@@ -23,4 +24,3 @@ export default function RootLayout({
     </html>
   );
 }
-
