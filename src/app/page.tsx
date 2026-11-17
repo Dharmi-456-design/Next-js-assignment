@@ -8,9 +8,7 @@ import {
   BarChart3,
   ArrowRight,
   ShieldCheck,
-  Zap,
   Clock,
-  Layers,
   Sparkles,
 } from "lucide-react";
 
@@ -21,7 +19,7 @@ export default function HomePage() {
       <section className="text-center max-w-3xl mx-auto space-y-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#426B50]/20 bg-[#426B50]/5 text-[#426B50] text-xs font-medium">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Workloom 2.0 — Freelance Business Platform</span>
+          <span>ReserveX — Freelance Business Platform</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#20231F] leading-[1.12]">

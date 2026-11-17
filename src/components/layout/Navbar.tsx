@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../../lib/utils";
@@ -35,6 +35,11 @@ export function Navbar() {
   const [isSeeding, setIsSeeding] = useState(false);
   const [seedSuccess, setSeedSuccess] = useState(false);
 
+  // Close mobile drawer on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   // Trigger quick database seed
   const handleSeed = async () => {
     setIsSeeding(true);
@@ -67,7 +72,7 @@ export function Navbar() {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-semibold tracking-tight text-[#20231F] leading-none">
-                  Workloom
+                  ReserveX
                 </span>
                 <span className="text-[10px] text-[#747970] leading-tight font-normal">
                   Freelance Workspace
@@ -76,7 +81,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
               {NAV_ITEMS.map((item) => {
                 const isActive =
                   item.href === "/dashboard"
@@ -132,7 +137,7 @@ export function Navbar() {
             {/* Profile Workspace Badge */}
             <div className="flex items-center gap-2 pl-2 border-l border-[#E5E7E2]">
               <div className="w-7 h-7 rounded-full bg-[#F1F2EE] border border-[#E5E7E2] flex items-center justify-center text-xs font-semibold text-[#426B50]">
-                WL
+                RX
               </div>
               <span className="hidden md:inline-block text-xs font-medium text-[#20231F]">
                 Studio Workspace
@@ -144,6 +149,8 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-1.5 rounded-md text-[#747970] hover:text-[#20231F] hover:bg-[#F1F2EE] transition-colors cursor-pointer ml-1"
               aria-label="Toggle navigation"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {mobileMenuOpen ? (
                 <X className="w-5 h-5" />
@@ -156,7 +163,7 @@ export function Navbar() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-3 border-t border-[#E5E7E2] space-y-1">
+          <div id="mobile-nav" className="lg:hidden py-3 border-t border-[#E5E7E2] space-y-1">
             {NAV_ITEMS.map((item) => {
               const isActive =
                 item.href === "/dashboard"
