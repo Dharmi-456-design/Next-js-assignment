@@ -18,6 +18,7 @@ import {
   AlertCircle,
   XCircle,
   FileText,
+  X,
 } from "lucide-react";
 
 export default function PaymentsPage() {
@@ -222,8 +223,17 @@ export default function PaymentsPage() {
             placeholder="Search payments by reference, client..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
+            className="w-full pl-9 pr-8 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#92978F] hover:text-[#20231F] p-0.5"
+              aria-label="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
@@ -277,13 +287,27 @@ export default function PaymentsPage() {
           title="No payments recorded"
           description="Log client transaction receipts and invoice remittances."
           action={
-            <Button
-              size="sm"
-              onClick={() => setIsModalOpen(true)}
-              icon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Record payment
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSearchQuery("");
+                  setStatusFilter("All");
+                  setMethodFilter("All");
+                  setClientFilter("All");
+                }}
+              >
+                Reset filters
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setIsModalOpen(true)}
+                icon={<Plus className="w-3.5 h-3.5" />}
+              >
+                Record payment
+              </Button>
+            </div>
           }
         />
       ) : (
@@ -344,6 +368,17 @@ export default function PaymentsPage() {
                   </tr>
                 ))}
               </tbody>
+              <tfoot className="bg-[#F7F7F4]/90 font-medium text-xs border-t border-[#E5E7E2]">
+                <tr>
+                  <td colSpan={5} className="py-2.5 px-4 text-[#747970]">
+                    Total ({filteredPayments.length} transactions)
+                  </td>
+                  <td className="py-2.5 px-4 font-bold text-[#20231F]">
+                    {formatINR(filteredPayments.reduce((acc, curr) => acc + (curr.amount || 0), 0))}
+                  </td>
+                  <td></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
