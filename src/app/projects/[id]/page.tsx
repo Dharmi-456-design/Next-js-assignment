@@ -140,7 +140,6 @@ export default function ProjectDetailPage({
 
   useEffect(() => {
     fetchProjectData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Handle Progress Update

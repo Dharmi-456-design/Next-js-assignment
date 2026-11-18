@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Trash2,
   ExternalLink,
+  X,
 } from "lucide-react";
 
 export default function ProjectsPage() {
@@ -182,12 +183,35 @@ export default function ProjectsPage() {
             placeholder="Search projects or clients..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
+            className="w-full pl-9 pr-8 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#92978F] hover:text-[#20231F] p-0.5"
+              aria-label="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         {/* Filters and View Toggle */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+          {/* Client Filter */}
+          <select
+            value={clientFilter}
+            onChange={(e) => setClientFilter(e.target.value)}
+            className="px-2.5 py-1.5 text-xs bg-white border border-[#E5E7E2] rounded-md text-[#20231F] cursor-pointer"
+          >
+            <option value="All">All Clients</option>
+            {clients.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
           {/* Status Filter */}
           <select
             value={statusFilter}
@@ -272,6 +296,7 @@ export default function ProjectsPage() {
                 setSearchQuery("");
                 setStatusFilter("All");
                 setPriorityFilter("All");
+                setClientFilter("All");
               }}
             >
               Reset filters
