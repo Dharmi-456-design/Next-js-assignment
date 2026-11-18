@@ -247,7 +247,8 @@ export default function DeliverablesPage() {
         />
       ) : (
         <div className="bg-white rounded-lg border border-[#E5E7E2] shadow-xs overflow-hidden">
-          <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
             <thead className="bg-[#F7F7F4]/70 text-[#747970] font-medium border-b border-[#E5E7E2]">
               <tr>
                 <th className="py-3 px-4">Deliverable</th>
@@ -319,7 +320,8 @@ export default function DeliverablesPage() {
             </tbody>
           </table>
         </div>
-      )}
+      </div>
+    )}
 
       {/* Modal: New Deliverable */}
       <Dialog

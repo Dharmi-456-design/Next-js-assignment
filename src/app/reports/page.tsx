@@ -296,7 +296,8 @@ export default function ReportsPage() {
         </div>
 
         {clientEarnings && clientEarnings.length > 0 ? (
-          <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
             <thead className="bg-[#F7F7F4]/60 text-[#747970] font-medium border-b border-[#E5E7E2]">
               <tr>
                 <th className="py-2.5 px-4">Client Account</th>
@@ -337,6 +338,7 @@ export default function ReportsPage() {
               </tr>
             </tfoot>
           </table>
+        </div>
         ) : (
           <div className="p-8 text-center text-xs text-[#747970]">
             No client financial data recorded yet.
