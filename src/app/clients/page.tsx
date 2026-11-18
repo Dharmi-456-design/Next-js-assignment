@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { formatINR } from "../../lib/utils";
+import { formatINR, getInitials } from "../../lib/utils";
 import { Button } from "../../components/shared/Button";
 import { Dialog } from "../../components/shared/Dialog";
 import { Input } from "../../components/shared/Input";
@@ -16,6 +16,8 @@ import {
   Trash2,
   Mail,
   Phone,
+  Edit,
+  X,
 } from "lucide-react";
 
 export default function ClientsPage() {
@@ -23,6 +25,7 @@ export default function ClientsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<IClientData | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,18 +56,47 @@ export default function ClientsPage() {
     fetchClients();
   }, []);
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleOpenCreate = () => {
+    setEditingClient(null);
+    setFormData({
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      address: "",
+      notes: "",
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEdit = (client: IClientData) => {
+    setEditingClient(client);
+    setFormData({
+      name: client.name || "",
+      company: client.company || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      address: client.address || "",
+      notes: client.notes || "",
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email) return;
     setSubmitting(true);
     try {
-      const res = await fetch("/api/clients", {
-        method: "POST",
+      const url = editingClient ? `/api/clients/${editingClient._id}` : "/api/clients";
+      const method = editingClient ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         setIsModalOpen(false);
+        setEditingClient(null);
         setFormData({
           name: "",
           company: "",
@@ -116,7 +148,7 @@ export default function ClientsPage() {
             variant="primary"
             size="md"
             icon={<Plus className="w-3.5 h-3.5" />}
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenCreate}
           >
             Add client
           </Button>
@@ -132,8 +164,17 @@ export default function ClientsPage() {
             placeholder="Search clients by name, company, or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
+            className="w-full pl-9 pr-8 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#92978F] hover:text-[#20231F] p-0.5"
+              aria-label="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <span className="text-xs text-[#747970] shrink-0 font-medium">
@@ -155,7 +196,7 @@ export default function ClientsPage() {
           action={
             <Button
               size="sm"
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleOpenCreate}
               icon={<Plus className="w-3.5 h-3.5" />}
             >
               Add client
@@ -181,15 +222,22 @@ export default function ClientsPage() {
                 {filteredClients.map((client) => (
                   <tr key={client._id} className="hover:bg-[#F7F7F4]/50 transition-colors">
                     <td className="py-3 px-4">
-                      <Link
-                        href={`/clients/${client._id}`}
-                        className="font-semibold text-[#20231F] hover:text-[#426B50] transition-colors block"
-                      >
-                        {client.name}
-                      </Link>
-                      {client.company && (
-                        <span className="text-[11px] text-[#747970]">{client.company}</span>
-                      )}
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-[#426B50]/10 text-[#426B50] font-semibold text-xs flex items-center justify-center shrink-0">
+                          {getInitials(client.name)}
+                        </div>
+                        <div>
+                          <Link
+                            href={`/clients/${client._id}`}
+                            className="font-semibold text-[#20231F] hover:text-[#426B50] transition-colors block"
+                          >
+                            {client.name}
+                          </Link>
+                          {client.company && (
+                            <span className="text-[11px] text-[#747970]">{client.company}</span>
+                          )}
+                        </div>
+                      </div>
                     </td>
 
                     <td className="py-3 px-4 text-[#747970]">
@@ -233,6 +281,13 @@ export default function ClientsPage() {
                           <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
                         <button
+                          onClick={() => handleOpenEdit(client)}
+                          className="p-1 rounded text-[#747970] hover:text-[#426B50] hover:bg-[#F1F2EE] transition-colors cursor-pointer"
+                          title="Edit client"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                        <button
                           onClick={() => handleDelete(client._id, client.name)}
                           className="p-1 rounded text-[#747970] hover:text-[#B94B45] hover:bg-[#B94B45]/10 transition-colors cursor-pointer"
                           title="Delete client"
@@ -249,14 +304,21 @@ export default function ClientsPage() {
         </div>
       )}
 
-      {/* Modal: Add Client */}
+      {/* Modal: Add or Edit Client */}
       <Dialog
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Add New Client"
-        description="Register a company or individual client contact."
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingClient(null);
+        }}
+        title={editingClient ? "Edit Client Profile" : "Add New Client"}
+        description={
+          editingClient
+            ? "Update company or individual client contact details."
+            : "Register a company or individual client contact."
+        }
       >
-        <form onSubmit={handleCreate} className="space-y-4">
+        <form onSubmit={handleSave} className="space-y-4">
           <Input
             label="Client Contact Name"
             placeholder="e.g. Alice Johnson"
@@ -312,12 +374,15 @@ export default function ClientsPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => {
+                setIsModalOpen(false);
+                setEditingClient(null);
+              }}
             >
               Cancel
             </Button>
             <Button type="submit" variant="primary" isLoading={submitting}>
-              Add Client
+              {editingClient ? "Save changes" : "Add client"}
             </Button>
           </div>
         </form>
