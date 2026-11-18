@@ -17,6 +17,7 @@ import {
   Plus,
   Clock,
   Trash2,
+  X,
 } from "lucide-react";
 
 export default function TasksPage() {
@@ -182,8 +183,17 @@ export default function TasksPage() {
             placeholder="Search tasks or projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
+            className="w-full pl-9 pr-8 py-1.5 text-xs bg-[#F7F7F4]/60 border border-[#E5E7E2] rounded-md text-[#20231F] placeholder:text-[#92978F] focus:outline-none focus:ring-1 focus:ring-[#426B50] focus:border-[#426B50]"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#92978F] hover:text-[#20231F] p-0.5"
+              aria-label="Clear search"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
@@ -264,13 +274,27 @@ export default function TasksPage() {
           title="No tasks match criteria"
           description="Try adjusting your filters or create a new task."
           action={
-            <Button
-              size="sm"
-              onClick={() => setIsModalOpen(true)}
-              icon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Create task
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSearchQuery("");
+                  setProjectFilter("All");
+                  setStatusFilter("All");
+                  setPriorityFilter("All");
+                }}
+              >
+                Reset filters
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setIsModalOpen(true)}
+                icon={<Plus className="w-3.5 h-3.5" />}
+              >
+                Create task
+              </Button>
+            </div>
           }
         />
       ) : viewMode === "board" ? (
@@ -297,7 +321,17 @@ export default function TasksPage() {
                       <span className="text-[11px] font-medium text-[#747970] line-clamp-1">
                         {task.projectId?.title || "Project"}
                       </span>
-                      <StatusBadge status={task.priority} />
+                      <div className="flex items-center gap-1.5">
+                        <StatusBadge status={task.priority} />
+                        <button
+                          onClick={() => handleDelete(task._id)}
+                          className="p-1 rounded text-[#92978F] hover:text-[#B94B45] hover:bg-[#B94B45]/10 transition-colors cursor-pointer"
+                          title="Delete task"
+                          aria-label="Delete task"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
 
                     <h4 className="text-xs font-semibold text-[#20231F] leading-snug">
@@ -355,7 +389,17 @@ export default function TasksPage() {
                       <span className="text-[11px] font-medium text-[#747970] line-clamp-1">
                         {task.projectId?.title || "Project"}
                       </span>
-                      <StatusBadge status={task.priority} />
+                      <div className="flex items-center gap-1.5">
+                        <StatusBadge status={task.priority} />
+                        <button
+                          onClick={() => handleDelete(task._id)}
+                          className="p-1 rounded text-[#92978F] hover:text-[#B94B45] hover:bg-[#B94B45]/10 transition-colors cursor-pointer"
+                          title="Delete task"
+                          aria-label="Delete task"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
 
                     <h4 className="text-xs font-semibold text-[#20231F] leading-snug">
@@ -419,7 +463,17 @@ export default function TasksPage() {
                     <span className="text-[11px] font-medium text-[#747970] line-clamp-1">
                       {task.projectId?.title || "Project"}
                     </span>
-                    <StatusBadge status={task.priority} />
+                    <div className="flex items-center gap-1.5">
+                      <StatusBadge status={task.priority} />
+                      <button
+                        onClick={() => handleDelete(task._id)}
+                        className="p-1 rounded text-[#92978F] hover:text-[#B94B45] hover:bg-[#B94B45]/10 transition-colors cursor-pointer"
+                        title="Delete task"
+                        aria-label="Delete task"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
 
                   <h4 className="text-xs font-medium line-through text-[#747970] leading-snug">
