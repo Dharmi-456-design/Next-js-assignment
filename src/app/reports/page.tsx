@@ -107,6 +107,17 @@ export default function ReportsPage() {
       <div className="bg-white p-3 rounded-lg border border-[#E5E7E2] shadow-xs flex flex-wrap items-center justify-between gap-3">
         <span className="text-xs font-semibold text-[#20231F]">Performance Filters</span>
         <div className="flex items-center gap-2">
+          {(clientFilter !== "All" || statusFilter !== "All") && (
+            <button
+              onClick={() => {
+                setClientFilter("All");
+                setStatusFilter("All");
+              }}
+              className="px-2 py-1 text-xs text-[#747970] hover:text-[#20231F] underline cursor-pointer"
+            >
+              Reset filters
+            </button>
+          )}
           <select
             value={clientFilter}
             onChange={(e) => setClientFilter(e.target.value)}
@@ -199,7 +210,7 @@ export default function ReportsPage() {
                   fontSize={11}
                   tickLine={false}
                   axisLine={{ stroke: "#E5E7E2" }}
-                  tickFormatter={(val) => `₹${val / 1000}k`}
+                  tickFormatter={(val) => (val === 0 ? "₹0" : `₹${Math.round(val / 1000)}k`)}
                 />
                 <Tooltip
                   formatter={(val: any) => [formatINR(val), "Revenue"]}
@@ -208,6 +219,7 @@ export default function ReportsPage() {
                     borderColor: "#E5E7E2",
                     borderRadius: "6px",
                     fontSize: "12px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
                   }}
                 />
                 <Bar dataKey="amount" fill="#426B50" radius={[4, 4, 0, 0]} />
@@ -244,12 +256,13 @@ export default function ReportsPage() {
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(val: any, name: any) => [val, name]}
+                  formatter={(val: any, name: any) => [`${val} projects`, name]}
                   contentStyle={{
                     backgroundColor: "#FFFFFF",
                     borderColor: "#E5E7E2",
                     borderRadius: "6px",
                     fontSize: "12px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
                   }}
                 />
               </PieChart>
@@ -309,6 +322,20 @@ export default function ReportsPage() {
                 );
               })}
             </tbody>
+            <tfoot className="bg-[#F7F7F4]/90 font-medium text-xs border-t border-[#E5E7E2]">
+              <tr>
+                <td className="py-2.5 px-4 font-semibold text-[#20231F]">
+                  Total ({clientEarnings.length} clients)
+                </td>
+                <td className="py-2.5 px-4 font-bold text-[#3F7954]">
+                  {formatINR(clientEarnings.reduce((acc: number, c: any) => acc + (c.earned || 0), 0))}
+                </td>
+                <td className="py-2.5 px-4 font-bold text-[#B78035]">
+                  {formatINR(clientEarnings.reduce((acc: number, c: any) => acc + (c.outstanding || 0), 0))}
+                </td>
+                <td className="py-2.5 px-4 text-right font-bold text-[#20231F]">100%</td>
+              </tr>
+            </tfoot>
           </table>
         ) : (
           <div className="p-8 text-center text-xs text-[#747970]">
