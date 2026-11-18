@@ -9,6 +9,7 @@ import { Dialog } from "../../components/shared/Dialog";
 import { Input } from "../../components/shared/Input";
 import { Select } from "../../components/shared/Select";
 import { EmptyState } from "../../components/shared/EmptyState";
+import { MetricCard } from "../../components/dashboard/MetricCard";
 import {
   IProjectData,
   IPaymentData,
@@ -98,7 +99,6 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchDashboard();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateProject = async (e: React.FormEvent) => {
@@ -213,57 +213,41 @@ export default function DashboardPage() {
 
       {/* 4 Core Business Overview Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="p-4 rounded-lg bg-white border border-[#E5E7E2] shadow-xs">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-[#747970]">Revenue Received</span>
-            <span className="w-6 h-6 rounded-md bg-[#3F7954]/10 flex items-center justify-center text-[#3F7954]">
-              <TrendingUp className="w-3.5 h-3.5" />
-            </span>
-          </div>
-          <div className="text-xl sm:text-2xl font-semibold text-[#20231F] tracking-tight">
-            {formatINR(metrics.revenueReceived)}
-          </div>
-          <p className="text-[11px] text-[#747970] mt-1">Confirmed payments received</p>
-        </div>
+        <MetricCard
+          label="Revenue Received"
+          value={formatINR(metrics.revenueReceived)}
+          description="Confirmed payments received"
+          icon={<TrendingUp className="w-3.5 h-3.5" />}
+          iconColorClass="text-[#3F7954]"
+          iconBgClass="bg-[#3F7954]/10"
+        />
 
-        <div className="p-4 rounded-lg bg-white border border-[#E5E7E2] shadow-xs">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-[#747970]">Outstanding Payments</span>
-            <span className="w-6 h-6 rounded-md bg-[#B78035]/10 flex items-center justify-center text-[#B78035]">
-              <AlertCircle className="w-3.5 h-3.5" />
-            </span>
-          </div>
-          <div className="text-xl sm:text-2xl font-semibold text-[#20231F] tracking-tight">
-            {formatINR(metrics.outstandingPayments)}
-          </div>
-          <p className="text-[11px] text-[#747970] mt-1">Pending client balance across projects</p>
-        </div>
+        <MetricCard
+          label="Outstanding Payments"
+          value={formatINR(metrics.outstandingPayments)}
+          description="Pending client balance across projects"
+          icon={<AlertCircle className="w-3.5 h-3.5" />}
+          iconColorClass="text-[#B78035]"
+          iconBgClass="bg-[#B78035]/10"
+        />
 
-        <div className="p-4 rounded-lg bg-white border border-[#E5E7E2] shadow-xs">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-[#747970]">Active Projects</span>
-            <span className="w-6 h-6 rounded-md bg-[#426B50]/10 flex items-center justify-center text-[#426B50]">
-              <Briefcase className="w-3.5 h-3.5" />
-            </span>
-          </div>
-          <div className="text-xl sm:text-2xl font-semibold text-[#20231F] tracking-tight">
-            {metrics.activeProjectsCount}
-          </div>
-          <p className="text-[11px] text-[#747970] mt-1">Currently in flight or planning</p>
-        </div>
+        <MetricCard
+          label="Active Projects"
+          value={metrics.activeProjectsCount}
+          description="Currently in flight or planning"
+          icon={<Briefcase className="w-3.5 h-3.5" />}
+          iconColorClass="text-[#426B50]"
+          iconBgClass="bg-[#426B50]/10"
+        />
 
-        <div className="p-4 rounded-lg bg-white border border-[#E5E7E2] shadow-xs">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-[#747970]">Completed Projects</span>
-            <span className="w-6 h-6 rounded-md bg-[#587B91]/10 flex items-center justify-center text-[#587B91]">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-            </span>
-          </div>
-          <div className="text-xl sm:text-2xl font-semibold text-[#20231F] tracking-tight">
-            {metrics.completedProjectsCount}
-          </div>
-          <p className="text-[11px] text-[#747970] mt-1">Successfully delivered</p>
-        </div>
+        <MetricCard
+          label="Completed Projects"
+          value={metrics.completedProjectsCount}
+          description="Successfully delivered"
+          icon={<CheckCircle2 className="w-3.5 h-3.5" />}
+          iconColorClass="text-[#587B91]"
+          iconBgClass="bg-[#587B91]/10"
+        />
       </div>
 
       {/* Main Two-Column Dashboard Layout */}
