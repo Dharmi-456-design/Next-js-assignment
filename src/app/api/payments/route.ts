@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Payment, Project, Activity } from "@/models";
 
+// GET /api/payments — lists payment transactions with overall financial summary.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -56,13 +57,15 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
+    console.error("[GET /api/payments]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch payments" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/payments — logs client payment and records financial activity.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -102,8 +105,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(populated, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/payments]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to record payment" },
       { status: 500 }
     );
   }

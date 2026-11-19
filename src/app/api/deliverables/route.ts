@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Deliverable, Activity } from "@/models";
 
+// GET /api/deliverables — returns client deliverable assets and handover links.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -20,13 +21,15 @@ export async function GET(req: Request) {
 
     return NextResponse.json(deliverables);
   } catch (error) {
+    console.error("[GET /api/deliverables]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch deliverables" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/deliverables — registers a new deliverable item with optional file link.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -63,8 +66,9 @@ export async function POST(req: Request) {
     );
     return NextResponse.json(populated, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/deliverables]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to create deliverable" },
       { status: 500 }
     );
   }

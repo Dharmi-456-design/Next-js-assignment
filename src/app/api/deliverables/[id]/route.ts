@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Deliverable, Activity } from "@/models";
 
+// PUT /api/deliverables/[id] — updates deliverable metadata and status.
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -40,13 +41,15 @@ export async function PUT(
     const updated = await Deliverable.findById(id).populate("projectId", "title");
     return NextResponse.json(updated);
   } catch (error) {
+    console.error("[PUT /api/deliverables/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to update deliverable" },
       { status: 500 }
     );
   }
 }
 
+// DELETE /api/deliverables/[id] — deletes a deliverable record.
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -65,8 +68,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: "Deliverable deleted" });
   } catch (error) {
+    console.error("[DELETE /api/deliverables/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to delete deliverable" },
       { status: 500 }
     );
   }
