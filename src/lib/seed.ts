@@ -255,5 +255,12 @@ export async function seedDatabase(force = false) {
     },
   ]);
 
-  return { success: true, message: "Database seeded successfully." };
+  return {
+    success: true,
+    message: "Database seeded successfully.",
+    counts: {
+      clients: clients.length,
+      projects: projects.length,
+    },
+  };
 }
