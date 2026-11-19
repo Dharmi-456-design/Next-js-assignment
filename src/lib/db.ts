@@ -8,13 +8,16 @@ import "@/models/Payment";
 import "@/models/Activity";
 import "@/models/Comment";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/workloom";
+// MongoDB connection URI — configure MONGODB_URI in your .env.local file.
+// Falls back to a local MongoDB instance for development.
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/reservex";
 
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
+// Preserve the connection across hot-reloads in Next.js development mode.
 declare global {
   var mongooseCache: MongooseCache | undefined;
 }
@@ -25,16 +28,23 @@ if (!cached) {
   cached = global.mongooseCache = { conn: null, promise: null };
 }
 
+/**
+ * Returns a cached Mongoose connection.
+ * Opens a new connection only when none is active.
+ */
 export async function connectToDatabase(): Promise<typeof mongoose> {
   if (cached!.conn) return cached!.conn;
 
   if (!cached!.promise) {
-    cached!.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
+    cached!.promise = mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+    });
   }
 
   try {
     cached!.conn = await cached!.promise;
   } catch (e) {
+    // Reset so the next call retries the connection.
     cached!.promise = null;
     throw e;
   }
