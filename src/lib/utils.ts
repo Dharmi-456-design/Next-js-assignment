@@ -6,15 +6,16 @@ export function cn(...inputs: (string | undefined | null | false)[]): string {
  * Format amounts into Indian Rupees (INR)
  * Example: 50000 -> ₹50,000
  */
-export function formatINR(amount: number | undefined | null): string {
-  if (amount === undefined || amount === null || isNaN(amount)) {
+export function formatINR(amount: number | string | undefined | null): string {
+  const numeric = typeof amount === "string" ? Number(amount) : amount;
+  if (numeric === undefined || numeric === null || isNaN(numeric)) {
     return "₹0";
   }
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(numeric);
 }
 
 export const formatCurrency = formatINR;
@@ -44,6 +45,7 @@ export function isOverdue(date: string | Date | undefined | null, isCompleted = 
   if (!date || isCompleted) return false;
   try {
     const d = new Date(date);
+    if (isNaN(d.getTime())) return false;
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     return d.getTime() < now.getTime();
