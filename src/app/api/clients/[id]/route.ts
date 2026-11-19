@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Client, Project, Payment } from "@/models";
 
+// GET /api/clients/[id] — returns a single client with projects, payments, and financials.
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -35,13 +36,15 @@ export async function GET(
       },
     });
   } catch (error) {
+    console.error("[GET /api/clients/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch client" },
       { status: 500 }
     );
   }
 }
 
+// PUT /api/clients/[id] — updates a client record.
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -50,6 +53,13 @@ export async function PUT(
     await connectToDatabase();
     const { id } = await params;
     const body = await req.json();
+
+    if (!body.name || !body.email) {
+      return NextResponse.json(
+        { error: "Name and email are required" },
+        { status: 400 }
+      );
+    }
 
     const client = await Client.findByIdAndUpdate(
       id,
@@ -70,13 +80,15 @@ export async function PUT(
 
     return NextResponse.json(client);
   } catch (error) {
+    console.error("[PUT /api/clients/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to update client" },
       { status: 500 }
     );
   }
 }
 
+// DELETE /api/clients/[id] — removes a client record.
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -92,8 +104,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: "Client deleted" });
   } catch (error) {
+    console.error("[DELETE /api/clients/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to delete client" },
       { status: 500 }
     );
   }

@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Client, Project, Payment } from "@/models";
 
+// GET /api/clients — returns all clients with aggregated financial metrics.
 export async function GET() {
   try {
     await connectToDatabase();
     const clients = await Client.find().sort({ createdAt: -1 }).lean();
 
-    // Calculate aggregated metrics per client
+    // Attach project count and financial summary to each client.
     const clientsWithMetrics = await Promise.all(
       clients.map(async (client) => {
         const clientProjects = await Project.find({ clientId: client._id }).lean();
@@ -40,13 +41,15 @@ export async function GET() {
 
     return NextResponse.json(clientsWithMetrics);
   } catch (error) {
+    console.error("[GET /api/clients]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch clients" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/clients — creates a new client record.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -61,7 +64,7 @@ export async function POST(req: Request) {
 
     const client = await Client.create({
       name: body.name.trim(),
-      email: body.email.trim(),
+      email: body.email.trim().toLowerCase(),
       phone: body.phone?.trim(),
       company: body.company?.trim(),
       address: body.address?.trim(),
@@ -70,8 +73,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(client, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/clients]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to create client" },
       { status: 500 }
     );
   }
