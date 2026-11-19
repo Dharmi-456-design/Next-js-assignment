@@ -19,8 +19,9 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
+      role="status"
       className={cn(
-        "flex flex-col items-center justify-center text-center p-8 sm:p-12 border border-dashed border-[#E5E7E2] rounded-lg bg-white/50",
+        "flex flex-col items-center justify-center text-center p-8 sm:p-12 border border-dashed border-[#E5E7E2] rounded-lg bg-white/50 transition-all",
         className
       )}
     >
@@ -28,8 +29,29 @@ export function EmptyState({
         {icon || <FolderOpen className="w-5 h-5 text-[#426B50]" />}
       </div>
       <h3 className="text-sm font-semibold text-[#20231F] mb-1">{title}</h3>
-      <p className="text-xs text-[#747970] max-w-sm mb-4">{description}</p>
+      <p className="text-xs text-[#747970] max-w-sm mb-4 leading-relaxed">{description}</p>
       {action && <div>{action}</div>}
+    </div>
+  );
+}
+
+/**
+ * Reusable LoadingSkeleton for data-fetching views
+ */
+export function LoadingSkeleton({
+  count = 3,
+  height = "h-16",
+  className,
+}: {
+  count?: number;
+  height?: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("space-y-3", className)} role="status" aria-label="Loading content">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className={cn("w-full bg-[#E5E7E2]/50 rounded-lg animate-pulse", height)} />
+      ))}
     </div>
   );
 }
