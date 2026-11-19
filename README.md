@@ -189,8 +189,11 @@ This populates MongoDB with sample clients, projects, tasks, milestones, deliver
 # Start development server (Turbopack)
 npm run dev
 
-# Build for production (Turbopack)
+# Build for production
 npm run build
+
+# Verify build integrity
+npm run check
 
 # Start production server
 npm start
@@ -200,6 +203,17 @@ npm run lint
 ```
 
 The development server starts at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 📅 4-Day / 32-Commit Implementation Roadmap
+
+The ReserveX application was organized and verified across a strict 4-day, 32-commit architecture schedule:
+
+- **Day 1: Project Architecture & Frontend Foundation** (Commits 1–8) — Folder structure, Next.js configs, global design tokens, accessible UI components, navigation, and TypeScript models.
+- **Day 2: Frontend Features & UI Refinement** (Commits 9–16) — MetricCard KPI extraction, clients, projects, tasks, deliverables, payments, Recharts visualizations, and mobile overflow responsiveness.
+- **Day 3: Backend, APIs & Database Optimization** (Commits 17–24) — MongoDB connection caching, Mongoose schemas, Client/Project/Task/Milestone/Deliverables/Payments APIs, and database seeding.
+- **Day 4: Integration, Testing & Finalization** (Commits 25–32) — Parallel fetching, Zod form validations, CRUD review, API response standardizers, edge case bug fixes, loading skeletons, production build verification, and final documentation.
 
 ---
 
