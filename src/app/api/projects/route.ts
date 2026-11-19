@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
-import { Project, Client, Task, Payment, Activity } from "@/models";
+import { Project, Task, Payment, Activity } from "@/models";
 
+// GET /api/projects — returns projects with task stats and payment totals.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -49,13 +50,15 @@ export async function GET(req: Request) {
 
     return NextResponse.json(projectsWithDetails);
   } catch (error) {
+    console.error("[GET /api/projects]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch projects" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/projects — creates a new project and logs initial activity.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -80,7 +83,7 @@ export async function POST(req: Request) {
       progress: Number(body.progress) || 0,
     });
 
-    // Record activity
+    // Record creation activity
     await Activity.create({
       title: "Project Created",
       description: `Project "${project.title}" created with budget ₹${project.budget.toLocaleString("en-IN")}`,
@@ -96,8 +99,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(populated, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/projects]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to create project" },
       { status: 500 }
     );
   }

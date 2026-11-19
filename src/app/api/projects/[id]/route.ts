@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import {
   Project,
-  Client,
   Task,
   Milestone,
   Deliverable,
@@ -11,6 +10,7 @@ import {
   Comment,
 } from "@/models";
 
+// GET /api/projects/[id] — returns project details, associated tasks, milestones, and financials.
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -63,13 +63,15 @@ export async function GET(
       },
     });
   } catch (error) {
+    console.error("[GET /api/projects/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch project" },
       { status: 500 }
     );
   }
 }
 
+// PUT /api/projects/[id] — updates project fields and logs progress changes.
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -109,13 +111,15 @@ export async function PUT(
     const updated = await Project.findById(id).populate("clientId", "name company");
     return NextResponse.json(updated);
   } catch (error) {
+    console.error("[PUT /api/projects/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to update project" },
       { status: 500 }
     );
   }
 }
 
+// DELETE /api/projects/[id] — deletes project and associated activities.
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -131,8 +135,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: "Project deleted" });
   } catch (error) {
+    console.error("[DELETE /api/projects/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to delete project" },
       { status: 500 }
     );
   }
