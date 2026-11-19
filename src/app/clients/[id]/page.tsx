@@ -13,6 +13,7 @@ import {
   MapPin,
   ArrowLeft,
   ArrowRight,
+  Trash2,
 } from "lucide-react";
 
 interface ClientDetailData {
@@ -54,6 +55,19 @@ export default function ClientDetailPage({
     fetchClient();
   }, [id]);
 
+  const handleDeleteClient = async () => {
+    if (!data?.client) return;
+    if (!confirm(`Are you sure you want to delete client "${data.client.name}"?`)) return;
+    try {
+      const res = await fetch(`/api/clients/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        window.location.href = "/clients";
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading || !data) {
     return (
       <div className="space-y-6">
@@ -93,13 +107,22 @@ export default function ClientDetailPage({
             )}
           </div>
 
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md bg-[#426B50] text-white hover:bg-[#34573F] transition-colors"
-          >
-            <span>Assign New Project</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleDeleteClient}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-[#E5E7E2] text-[#B94B45] hover:bg-[#B94B45]/10 transition-colors cursor-pointer"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Client</span>
+            </button>
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md bg-[#426B50] text-white hover:bg-[#34573F] transition-colors"
+            >
+              <span>Assign New Project</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
 
