@@ -49,6 +49,7 @@ interface DashboardData {
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [clients, setClients] = useState<IClientData[]>([]);
@@ -77,12 +78,20 @@ export default function DashboardPage() {
   const fetchDashboard = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/dashboard");
+      setError(null);
+      const [res, cRes] = await Promise.all([
+        fetch("/api/dashboard"),
+        fetch("/api/clients"),
+      ]);
+
       if (res.ok) {
         const json = await res.json();
         setData(json);
+      } else {
+        const errJson = await res.json().catch(() => ({}));
+        setError(errJson.error || "Failed to load dashboard data");
       }
-      const cRes = await fetch("/api/clients");
+
       if (cRes.ok) {
         const cJson = await cRes.json();
         setClients(cJson);
@@ -92,6 +101,7 @@ export default function DashboardPage() {
       }
     } catch (err) {
       console.error(err);
+      setError("Network error connecting to backend API");
     } finally {
       setLoading(false);
     }
@@ -166,6 +176,19 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 h-72 bg-white border border-[#E5E7E2] rounded-lg animate-pulse" />
           <div className="h-72 bg-white border border-[#E5E7E2] rounded-lg animate-pulse" />
         </div>
+      </div>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <div className="p-8 text-center bg-white rounded-lg border border-[#E5E7E2] shadow-xs space-y-3">
+        <AlertCircle className="w-8 h-8 text-[#B94B45] mx-auto" />
+        <h3 className="text-sm font-semibold text-[#20231F]">Unable to load dashboard</h3>
+        <p className="text-xs text-[#747970]">{error}</p>
+        <Button size="sm" onClick={fetchDashboard}>
+          Retry
+        </Button>
       </div>
     );
   }
