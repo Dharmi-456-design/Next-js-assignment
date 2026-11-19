@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
-import { Project, Client, Payment, Task, Activity } from "@/models";
+import { Project, Payment, Task, Activity } from "@/models";
 
+// GET /api/dashboard — returns aggregated studio KPIs, deadlines, and revenue trend.
 export async function GET() {
   try {
     await connectToDatabase();
@@ -102,8 +103,9 @@ export async function GET() {
       revenueTrend,
     });
   } catch (error) {
+    console.error("[GET /api/dashboard]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch dashboard metrics" },
       { status: 500 }
     );
   }

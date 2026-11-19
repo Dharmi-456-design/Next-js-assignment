@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Project, Client, Payment, Task } from "@/models";
 
+// GET /api/reports — returns analytical metrics for revenue trends and client distributions.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -123,8 +124,9 @@ export async function GET(req: Request) {
       })),
     });
   } catch (error) {
+    console.error("[GET /api/reports]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to generate reports" },
       { status: 500 }
     );
   }

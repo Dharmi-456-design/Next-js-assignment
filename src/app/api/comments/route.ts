@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Comment, Activity } from "@/models";
 
+// POST /api/comments — posts a collaboration note on a project and logs activity.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -29,8 +30,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(comment, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/comments]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to post comment" },
       { status: 500 }
     );
   }
