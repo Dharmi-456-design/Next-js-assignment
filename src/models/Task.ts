@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+// Task model — a unit of work linked to a project.
 export interface ITask extends Document {
   title: string;
   description?: string;
@@ -32,10 +33,12 @@ const TaskSchema = new Schema<ITask>(
     },
     priority: {
       type: String,
+      enum: ["Low", "Medium", "High"],
       default: "Medium",
     },
     status: {
       type: String,
+      enum: ["To Do", "In Progress", "Completed"],
       default: "To Do",
     },
   },

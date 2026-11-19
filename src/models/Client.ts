@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+// Client model — stores contact and billing information for studio clients.
 export interface IClient extends Document {
   name: string;
   email: string;
@@ -22,6 +23,7 @@ const ClientSchema = new Schema<IClient>(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     phone: {
       type: String,

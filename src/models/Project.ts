@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+// Project model — represents a client engagement with budget, timeline, and status.
 export interface IProject extends Document {
   title: string;
   description?: string;
@@ -34,6 +35,7 @@ const ProjectSchema = new Schema<IProject>(
       type: Number,
       required: true,
       default: 0,
+      min: 0,
     },
     startDate: {
       type: Date,
@@ -52,6 +54,8 @@ const ProjectSchema = new Schema<IProject>(
     progress: {
       type: Number,
       default: 0,
+      min: 0,
+      max: 100,
     },
   },
   { timestamps: true }

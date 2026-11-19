@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+// Deliverable model — a file, asset or sign-off submitted for a project.
 export interface IDeliverable extends Document {
   title: string;
   description?: string;
@@ -46,6 +47,7 @@ const DeliverableSchema = new Schema<IDeliverable>(
     },
     status: {
       type: String,
+      enum: ["Pending", "Submitted", "Approved", "Revision Required"],
       default: "Pending",
     },
   },

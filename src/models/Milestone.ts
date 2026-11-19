@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+// Milestone model — a key checkpoint within a project.
 export interface IMilestone extends Document {
   title: string;
   description?: string;
@@ -32,6 +33,7 @@ const MilestoneSchema = new Schema<IMilestone>(
     },
     status: {
       type: String,
+      enum: ["To Do", "In Progress", "Completed"],
       default: "To Do",
     },
     completedAt: {
