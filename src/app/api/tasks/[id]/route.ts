@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Task, Activity } from "@/models";
 
+// PUT /api/tasks/[id] — updates task details or status and logs status transitions.
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -36,13 +37,15 @@ export async function PUT(
     const updated = await Task.findById(id).populate("projectId", "title");
     return NextResponse.json(updated);
   } catch (error) {
+    console.error("[PUT /api/tasks/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to update task" },
       { status: 500 }
     );
   }
 }
 
+// DELETE /api/tasks/[id] — removes a task record.
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -58,8 +61,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: "Task deleted" });
   } catch (error) {
+    console.error("[DELETE /api/tasks/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to delete task" },
       { status: 500 }
     );
   }

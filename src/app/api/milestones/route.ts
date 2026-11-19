@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Milestone, Activity } from "@/models";
 
+// GET /api/milestones — lists project milestones sorted by due date.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -18,13 +19,15 @@ export async function GET(req: Request) {
 
     return NextResponse.json(milestones);
   } catch (error) {
+    console.error("[GET /api/milestones]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch milestones" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/milestones — creates a project milestone and registers activity.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -55,8 +58,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(milestone, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/milestones]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to create milestone" },
       { status: 500 }
     );
   }

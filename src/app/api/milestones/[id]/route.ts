@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Milestone, Activity } from "@/models";
 
+// PUT /api/milestones/[id] — updates milestone status and marks completion.
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -37,13 +38,15 @@ export async function PUT(
 
     return NextResponse.json(existing);
   } catch (error) {
+    console.error("[PUT /api/milestones/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to update milestone" },
       { status: 500 }
     );
   }
 }
 
+// DELETE /api/milestones/[id] — deletes a milestone record.
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -59,8 +62,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: "Milestone deleted" });
   } catch (error) {
+    console.error("[DELETE /api/milestones/:id]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to delete milestone" },
       { status: 500 }
     );
   }

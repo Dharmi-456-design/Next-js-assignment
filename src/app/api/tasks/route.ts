@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Task, Activity } from "@/models";
 
+// GET /api/tasks — returns task list filtered by project, status, or priority.
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -22,13 +23,15 @@ export async function GET(req: Request) {
 
     return NextResponse.json(tasks);
   } catch (error) {
+    console.error("[GET /api/tasks]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to fetch tasks" },
       { status: 500 }
     );
   }
 }
 
+// POST /api/tasks — creates a new task and logs creation activity.
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -60,8 +63,9 @@ export async function POST(req: Request) {
     const populated = await Task.findById(task._id).populate("projectId", "title");
     return NextResponse.json(populated, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/tasks]", error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Failed to create task" },
       { status: 500 }
     );
   }
